@@ -33,9 +33,8 @@ def get_a_user(public_name):
     return User.query.filter_by(public_name=public_name).first()
 
 
-def get_a_user(public_name):
-    user = User.query.filter_by(public_name=public_name).first()
-    db.session.delete(user)
+def delete_user(public_name):
+    db.session.delete(public_name)
     db.session.commit()
 
 
