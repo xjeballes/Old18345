@@ -11,6 +11,7 @@ def save_new_user(data):
         new_user = User(
             public_name=str(uuid.uuid4()),
             email=data['email'],  # contacts, admins, members
+            contact=data['contact'],
             username=data['username'],
             password=data['password'],
             registered_on=datetime.datetime.utcnow()
