@@ -18,7 +18,6 @@ class UserList(Resource):
         """List all registered users"""
         return get_all_users()
 
-    @token_required
     @api.response(201, 'User successfully created.')
     @api.doc('create a new user')
     @api.expect(_user, validate=True)
