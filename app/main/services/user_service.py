@@ -35,8 +35,43 @@ def get_a_user(public_name):
 
 
 def delete_user(public_name):
-    db.session.delete(public_name)
-    db.session.commit()
+    user = User.query.filter_by(public_name=public_name).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        response_object = {
+            'status': 'success',
+            'message': 'user has been deleted'
+        }
+        return response_object, 200
+    else:
+        response_object = {
+            'status': 'failed',
+            'message': 'No user found'
+        }
+        return response_object, 409
+
+
+def update_user(public_name):
+    user = User.query.filterby(public_name=public_name).first()
+    if user:
+        user.public_name = str(uuid.uuid4()),
+        user.email = ['email'],
+        user.contact = ['contact'],
+        user.username = ['username'],
+        user.password = ['password'],
+        db.session.commit()
+        response_object = {
+            'status': 'Success',
+            'message': 'User updated!'
+        }
+        return response_object, 200
+    else:
+        response_object = {
+            'status': 'Failed',
+            'message': 'No user found'
+        }
+        return response_object, 409
 
 
 def save_changes(data):
