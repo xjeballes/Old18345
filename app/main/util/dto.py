@@ -27,3 +27,13 @@ class CircleDto:
         'contact_num': fields.String(description='circle contact'),
         'circle_name': fields.String(description='circle Identifier')
     })
+
+
+class BusinessDto:
+    api = Namespace('business', description='business related operations')
+    business = api.model('business', {
+        'email': fields.String(required=True, description='business email address'),
+        'contact_num': fields.String(description='business contact number'),
+        'address': fields.String(description='business address'),
+        'business_name': fields.String(description='business Identifier')
+    })
