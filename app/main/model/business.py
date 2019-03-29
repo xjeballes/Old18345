@@ -6,7 +6,7 @@ class Business(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
-    address = db.Column(db.String(255), nullable=True)
+    address = db.Column(db.String(255), nullable=False)
     contact_num = db.Column(db.String(20), nullable=True)
     business_name = db.Column(db.String(255), unique=True)
 
