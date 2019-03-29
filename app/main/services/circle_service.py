@@ -15,11 +15,15 @@ def create_new_circle(data):
             registered_on=datetime.datetime.utcnow()
         )
         save_changes(new_circle)
-        return new_circle
+        response_object = {
+            'status': 'success',
+            'message': 'circle created'
+        }
+        return response_object, 200
     else:
         response_object = {
             'status': 'fail',
-            'message': 'This circle already exists. Please Log in.',
+            'message': 'This circle already exists.',
         }
         return response_object, 409
 

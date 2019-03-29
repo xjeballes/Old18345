@@ -47,11 +47,10 @@ class User(Resource):
     @api.marshal_with(_user)
     def delete(self, public_name):
         """delete a user given its identifier"""
-        user = delete_user(public_name)
         if not user:
             api.abort(404)
         else:
-            return user
+            delete_user(public_name)
 
     @token_required
     @api.doc('update a user')

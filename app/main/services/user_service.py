@@ -10,7 +10,7 @@ def save_new_user(data):
     if not user:
         new_user = User(
             public_name=str(uuid.uuid4()),
-            email=data['email'],  # contacts, admins, members
+            email=data['email'],
             contact=data['contact'],
             username=data['username'],
             password=data['password'],
