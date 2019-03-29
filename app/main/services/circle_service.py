@@ -19,7 +19,7 @@ def create_new_circle(data):
     else:
         response_object = {
             'status': 'fail',
-            'message': 'This circle already exists. Please Log in.',
+            'message': 'This circle already exists.',
         }
         return response_object, 409
 
