@@ -52,24 +52,30 @@ def delete_user(public_name):
         return response_object, 409
 
 
-def update_user(public_name):
-    user = User.query.filterby(public_name=public_name).first()
+def update_user(public_name, data):
+    user = User.query.filter_by(public_name=public_name).first()
     if user:
-        user.public_name = str(uuid.uuid4()),
-        user.email = ['email'],
-        user.contact = ['contact'],
-        user.username = ['username'],
-        user.password = ['password'],
-        db.session.commit()
-        response_object = {
-            'status': 'Success',
-            'message': 'User updated!'
-        }
-        return response_object, 200
+        if User.query.filter_by(email=data['email']).count() == 0 or User.query.filter_by(email=data['email']).count() == 1 and user.email == newdata['email']:
+            user.public_name = str(uuid.uuid4()),
+            user.email = data['email'],
+            user.contact = data['contact'],
+            user.username = data['username'],
+            db.session.commit()
+            response_object = {
+                'status': 'success',
+                'message': 'user updated'
+            }
+            return response_object, 200
+        else:
+            response_object = {
+                'status': 'failed',
+                'message': 'email already used.'
+            }
+            return response_object, 409
     else:
         response_object = {
-            'status': 'Failed',
-            'message': 'No user found'
+            'status': 'failed',
+            'message': 'no user found.'
         }
         return response_object, 409
 

@@ -44,9 +44,8 @@ class Circle(Resource):
     @api.doc('remove a circle')
     @api.marshal_with(_circle)
     def delete(self, circle_name):
-        circle = get_circle(circle_name)
+        circle = delete_circle(circle_name)
         if not circle:
             api.abort(404)
         else:
-            delete_circle(circle)
-            return '', 200
+            return circle

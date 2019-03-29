@@ -44,9 +44,8 @@ class business(Resource):
     @api.doc('remove a business')
     @api.marshal_with(_business)
     def delete(self, business_name):
-        business = get_business(business_name)
+        business = delete_business(business_name)
         if not business:
             api.abort(404)
         else:
-            delete_business(business)
-            return '', 200
+            return business
