@@ -12,6 +12,7 @@ def create_new_business(data):
             business_name=str(uuid.uuid4()),
             email=data['email'],
             contact_num=data['contact_num'],
+            address=data['address'],
             registered_on=datetime.datetime.utcnow()
         )
         save_changes(new_business)
