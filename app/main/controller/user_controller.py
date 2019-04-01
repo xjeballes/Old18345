@@ -59,10 +59,15 @@ class User(Resource):
             return user
 
     @token_required
-    @api.doc('update a user')
+    @api.doc('update a user', params={
+        'email': {'in': 'form', 'description': 'Email'},
+        'contact': {'in': 'form', 'description': 'Contact'},
+        'username': {'in': 'form', 'description': 'Username'},
+        'public_name': {'in': 'form', 'description': 'Public Name'}
+    })
     def put(self, public_name):
         """update user properties"""
-        data = request.json
+        data = request.form
         user = update_user(public_name=public_name, data=data)
         if not user:
             api.abort(404)

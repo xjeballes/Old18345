@@ -19,10 +19,13 @@ class CircleList(Resource):
 
     @token_required
     @api.response(201, 'Circle successfully created.')
-    @api.doc('create a new circle')
-    @api.expect(_circle, validate=True)
+    @api.doc('create a new circle', params={
+        'circle_name': {'in': 'form', 'description': 'circle name'},
+        'email': {'in': 'form', 'description': 'circle email'},
+        'contact_num': {'in': 'form', 'description': 'circle contact numbers'}
+    })
     def post(self):
-        data = request.json
+        data = request.form
         return create_new_circle(data=data)
 
 
