@@ -19,11 +19,17 @@ class UserList(Resource):
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
-    @api.doc('create a new user')
-    @api.expect(_user, validate=True)
+    @api.doc('create a new user', params={
+        'email': {'in': 'form', 'description': 'Email'},
+        'contact': {'in': 'form', 'description': 'Contact'},
+        'username': {'in': 'form', 'description': 'Username'},
+        'password': {'in': 'form', 'description': 'Password'},
+        'public_name': {'in': 'form', 'description': 'Public Name'}
+    })
+    # @api.expect(_user, validate=True)
     def post(self):
         """Creates a new User """
-        data = request.json
+        data = request.form
         return save_new_user(data=data)
 
 
