@@ -13,6 +13,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
+    contact = db.Column(db.String(20), nullable=True)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     public_name = db.Column(db.String(100), unique=True)
@@ -41,7 +42,7 @@ class User(db.Model):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=3650),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }

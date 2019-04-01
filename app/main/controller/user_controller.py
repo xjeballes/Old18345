@@ -3,10 +3,11 @@ from flask_restplus import Resource
 
 from ..util.dto import UserDto
 from ..util.decorator import token_required
-from ..services.user_service import save_new_user, get_all_users, get_a_user, delete_user
+from ..services.user_service import save_new_user, get_all_users, get_a_user, delete_user, update_user
 
 api = UserDto.api
 _user = UserDto.user
+parser = UserDto.parser
 
 
 @api.route('/')
@@ -19,11 +20,10 @@ class UserList(Resource):
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
-    @api.doc('create a new user')
-    @api.expect(_user, validate=True)
+    @api.doc(parser=parser)
     def post(self):
         """Creates a new User """
-        data = request.json
+        data = parser.parse_args()
         return save_new_user(data=data)
 
 
@@ -44,12 +44,26 @@ class User(Resource):
 
     @token_required
     @api.doc('delete a user')
-    @api.marshal_with(_user)
     def delete(self, public_name):
         """delete a user given its identifier"""
-        user = get_a_user(public_name)
+        user = delete_user(public_name)
+        if not user:
+            api.abort()
+        else:
+            return user
+
+    @token_required
+    @api.doc('update a user', params={
+        'email': {'in': 'form', 'description': 'Email'},
+        'contact': {'in': 'form', 'description': 'Contact'},
+        'username': {'in': 'form', 'description': 'Username'},
+        'public_name': {'in': 'form', 'description': 'Public Name'}
+    })
+    def put(self, public_name):
+        """update user properties"""
+        data = request.form
+        user = update_user(public_name=public_name, data=data)
         if not user:
             api.abort(404)
         else:
-            delete_user(user)
-            return '', 200
+            return user

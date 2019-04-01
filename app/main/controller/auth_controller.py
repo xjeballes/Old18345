@@ -3,6 +3,7 @@ from flask_restplus import Resource
 
 from app.main.services.auth_helper import Auth
 from ..util.dto import AuthDto
+from ..util.decorator import token_required
 
 api = AuthDto.api
 user_auth = AuthDto.user_auth
@@ -13,14 +14,17 @@ class UserLogin(Resource):
     """
         User Login Resource
     """
-    @api.doc('user login')
-    @api.expect(user_auth, validate=True)
+    @api.doc('user login', params={
+        'email': {'in': 'form', 'description': 'User Email'},
+        'password': {'in': 'form', 'description': 'User Password'},
+    })
     def post(self):
         # get the post data
-        post_data = request.json
+        post_data = request.form
         return Auth.login_user(data=post_data)
 
 
+@token_required
 @api.route('/logout')
 class LogoutAPI(Resource):
     """
@@ -28,6 +32,5 @@ class LogoutAPI(Resource):
     """
     @api.doc('logout a user')
     def post(self):
-        # get auth token
         auth_header = request.headers.get('Authorization')
         return Auth.logout_user(data=auth_header)
