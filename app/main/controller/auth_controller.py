@@ -7,6 +7,7 @@ from ..util.decorator import token_required
 
 api = AuthDto.api
 user_auth = AuthDto.user_auth
+parser = AuthDto.parser
 
 
 @api.route('/login')
@@ -14,10 +15,7 @@ class UserLogin(Resource):
     """
         User Login Resource
     """
-    @api.doc('user login', params={
-        'email': {'in': 'form', 'description': 'User Email'},
-        'password': {'in': 'form', 'description': 'User Password'},
-    })
+    @api.doc('user login', parser=parser)
     def post(self):
         # get the post data
         post_data = request.form

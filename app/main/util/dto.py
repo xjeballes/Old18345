@@ -12,11 +12,11 @@ class UserDto:
     })
 
     parser = api.parser()
-    parser.add_argument('email', type=str, help='user email address')
-    parser.add_argument('contact', type=str, help='user contact number')
-    parser.add_argument('username', type=str, help='user username')
-    parser.add_argument('password', type=str, help='user password')
-    parser.add_argument('public_name', type=str, help='user identifier')
+    parser.add_argument('email', type=str, help='user email address', location='form')
+    parser.add_argument('contact', type=str, help='user contact number', location='form')
+    parser.add_argument('username', type=str, help='user username', location='form')
+    parser.add_argument('password', type=str, help='user password', location='form')
+    parser.add_argument('public_name', type=str, help='user identifier', location='form')
 
 
 class AuthDto:
@@ -25,6 +25,10 @@ class AuthDto:
         'email': fields.String(required=True, description='The email address'),
         'password': fields.String(required=True, description='The user password '),
     })
+
+    parser = api.parser()
+    parser.add_argument('email', type=str, help='user email address', location='form')
+    parser.add_argument('password', type=str, help='user password', location='form')
 
 
 class CircleDto:

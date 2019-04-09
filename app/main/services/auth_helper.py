@@ -18,6 +18,7 @@ class Auth:
                         'Authorization': auth_token.decode()
                     }
                     return response_object, 200
+
             else:
                 response_object = {
                     'status': 'fail',
@@ -36,7 +37,7 @@ class Auth:
     @staticmethod
     def logout_user(data):
         if data:
-            auth_token = data.split(" ")[1]
+            auth_token = data.split(" ")[0]
         else:
             auth_token = ''
         if auth_token:

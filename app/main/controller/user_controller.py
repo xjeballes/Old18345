@@ -20,10 +20,10 @@ class UserList(Resource):
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
-    @api.doc(parser=parser)
+    @api.doc('user registration', parser=parser)
     def post(self):
         """Creates a new User """
-        data = parser.parse_args()
+        data = parser.form
         return save_new_user(data=data)
 
 
@@ -53,12 +53,7 @@ class User(Resource):
             return user
 
     @token_required
-    @api.doc('update a user', params={
-        'email': {'in': 'form', 'description': 'Email'},
-        'contact': {'in': 'form', 'description': 'Contact'},
-        'username': {'in': 'form', 'description': 'Username'},
-        'public_name': {'in': 'form', 'description': 'Public Name'}
-    })
+    @api.doc('update a user', parser=parser)  # try lang
     def put(self, public_name):
         """update user properties"""
         data = request.form
