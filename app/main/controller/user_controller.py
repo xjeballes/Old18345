@@ -23,7 +23,7 @@ class UserList(Resource):
     @api.doc('user registration', parser=parser)
     def post(self):
         """Creates a new User """
-        data = parser.form
+        data = request.form
         return save_new_user(data=data)
 
 
