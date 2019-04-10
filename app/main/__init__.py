@@ -17,5 +17,6 @@ def create_app(config_name):
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     return app
