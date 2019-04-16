@@ -19,6 +19,7 @@ class UserLogin(Resource):
     def post(self):
         # get the post data
         post_data = request.form
+        # post_data = request.json
         return Auth.login_user(data=post_data)
 
 

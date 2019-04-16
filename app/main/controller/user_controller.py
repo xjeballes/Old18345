@@ -24,6 +24,7 @@ class UserList(Resource):
     def post(self):
         """Creates a new User """
         data = request.form
+        # data = request.json
         return save_new_user(data=data)
 
 
