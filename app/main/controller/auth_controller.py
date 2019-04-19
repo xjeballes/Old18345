@@ -18,9 +18,9 @@ class UserLogin(Resource):
     @api.doc('user login', parser=parser)
     def post(self):
         # get the post data
-        post_data = request.form
-        return Auth.login_user(data=post_data)
+        post_data = request.json
 
+        return Auth.login_user(data=post_data)
 
 @token_required
 @api.route('/logout')
@@ -31,4 +31,5 @@ class LogoutAPI(Resource):
     @api.doc('logout a user')
     def post(self):
         auth_header = request.headers.get('Authorization')
+        
         return Auth.logout_user(data=auth_header)

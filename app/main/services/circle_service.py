@@ -2,7 +2,7 @@ import uuid
 import datetime
 
 from app.main import db
-from app.main.model.circle import Circle
+from app.main.models.circle import Circle
 
 
 def create_new_circle(data):

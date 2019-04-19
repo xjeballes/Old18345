@@ -2,7 +2,7 @@ import uuid
 import datetime
 
 from app.main import db
-from app.main.model.business import Business
+from app.main.models.business import Business
 
 
 def create_new_business(data):

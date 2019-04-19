@@ -9,56 +9,57 @@ api = UserDto.api
 _user = UserDto.user
 parser = UserDto.parser
 
-
 @api.route('/')
 class UserList(Resource):
     @token_required
-    @api.doc('list_of_registered_users')
-    @api.marshal_list_with(_user, envelope='data')
+    @api.doc("show list of all registered users")
+    @api.marshal_list_with(_user, envelope="data")
     def get(self):
-        """List all registered users"""
+
         return get_all_users()
 
-    @api.response(201, 'User successfully created.')
-    @api.doc('user registration', parser=parser)
+    @api.response(201, "User successfully created.")
+    @api.doc("register a user", parser=parser)
     def post(self):
-        """Creates a new User """
-        data = request.form
-        return save_new_user(data=data)
+        post_data = request.json
 
+        return save_new_user(data=post_data)
 
-@api.route('/<public_name>')
-@api.param('public_name', 'The User identifier')
-@api.response(404, 'User not found.')
+@api.route("/<username>")
+@api.param("username", "The User identifier")
+@api.response(404, "User not found.")
 class User(Resource):
     @token_required
-    @api.doc('get a user')
+    @api.doc("get a user")
     @api.marshal_with(_user)
-    def get(self, public_name):
-        """get a user given its identifier"""
-        user = get_a_user(public_name)
+    def get(self, username):
+        user = get_a_user(username)
+
         if not user:
             api.abort(404)
+            
         else:
             return user
 
     @token_required
-    @api.doc('delete a user')
-    def delete(self, public_name):
-        """delete a user given its identifier"""
-        user = delete_user(public_name)
+    @api.doc("delete a user")
+    def delete(self, username):
+        user = delete_user(username)
+
         if not user:
-            api.abort()
+            api.abort(404)
+            
         else:
             return user
 
     @token_required
-    @api.doc('update a user', parser=parser)  # try lang
-    def put(self, public_name):
-        """update user properties"""
+    @api.doc("update a user", parser=parser)
+    def put(self, username):
         data = request.form
-        user = update_user(public_name=public_name, data=data)
+
+        user = update_user(username=username, data=data)
         if not user:
             api.abort(404)
+
         else:
             return user
