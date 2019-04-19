@@ -19,7 +19,14 @@ class UserList(Resource):
     @api.response(201, "User successfully created.")
     @api.doc("register a user", parser=parser)
     def post(self):
+<<<<<<< HEAD
         post_data = request.json
+=======
+        """Creates a new User """
+        data = request.form
+        # data = request.json
+        return save_new_user(data=data)
+>>>>>>> cffd89c85a4e198c7c845a0c82d399f16a11e6e6
 
         return save_new_user(data=post_data)
 

@@ -6,7 +6,6 @@ from app.main.services.help import Helper
 
 def login_user(data):
     try:
-        print(data.get("usernameOrEmail"))
         user = User.query.filter_by(email=data.get("usernameOrEmail")).first()
 
         if user and user.check_password(data.get("password")):

@@ -14,7 +14,14 @@ parser = AuthDto.parser
 class UserLogin(Resource):
     @api.doc("user login", parser=parser)
     def post(self):
+<<<<<<< HEAD
         post_data = request.json
+=======
+        # get the post data
+        post_data = request.form
+        # post_data = request.json
+        return Auth.login_user(data=post_data)
+>>>>>>> cffd89c85a4e198c7c845a0c82d399f16a11e6e6
 
         return login_user(data=post_data)
 
