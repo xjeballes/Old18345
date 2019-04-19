@@ -5,7 +5,7 @@ from flask_script import Manager
 
 from app import blueprint
 from app.main import create_app, db
-from app.main.models import user, pet, specie, breed, circle, business, pet_specie_rel, specie_breed_rel, blacklist
+from app.main.models import *
 
 app = create_app("dev")
 app.register_blueprint(blueprint)

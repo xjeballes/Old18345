@@ -1,6 +1,15 @@
 from .. import db, flask_bcrypt
+from app.main.models import business, circle
 
-from app.main.models import user_business_rel, user_circle_rel
+user_business_rel = db.Table("user_business_rel",
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
+    db.Column("business_id", db.Integer, db.ForeignKey("business.id"))
+)
+
+user_circle_rel = db.Table("user_circle_rel",
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
+    db.Column("circle_id", db.Integer, db.ForeignKey("circle.id"))
+)
 
 class User(db.Model):
     __tablename__ = "user"
@@ -16,10 +25,10 @@ class User(db.Model):
     contact_no = db.Column(db.String(20), nullable=True)
     registered_on = db.Column(db.DateTime, nullable=False)
     
-    has_pets = db.relationship("pet", backref="user", lazy=True)
-
-    business_rel = db.relationship("business", secondary=user_business_rel, backref=db.backref("user", lazy=True))
-    circle_rel = db.relationship("circle", secondary=user_circle_rel, backref=db.backref("user", lazy=True))
+    has_pets = db.relationship("Pet", backref="user", lazy=True)
+    
+    business_rel = db.relationship("Business", secondary=user_business_rel, backref=db.backref("user", lazy=True))
+    circle_rel = db.relationship("Circle", secondary=user_circle_rel, backref=db.backref("user", lazy=True))
 
     @property
     def password(self):

@@ -63,3 +63,43 @@ def update_user(username, data):
             return Helper.return_resp_obj("fail", "Email or username has already been used.", None, 409)
     else:
         return Helper.return_resp_obj("fail", "No user found.", None, 409)
+
+def get_logged_in_user(new_request):
+    auth_token = new_request.headers.get("Authorization")
+
+    if auth_token:
+        resp = Helper.decode_auth_token(auth_token)
+
+        user = User.query.filter_by(public_id=resp).first()
+
+        if user:
+            response_object = {
+                "status" : "success",
+                "data" : {
+                    "firstName" : user.first_name,
+                    "lastName" : user.last_name,
+                    "email" : user.email,
+                    "username" : user.username,
+                    "contactNo" : user.contact_no,
+                    "admin": user.admin,
+                    "registeredOn": str(user.registered_on)
+                }
+            }
+
+            return response_object, 200
+
+        else:
+            response_object = {
+                "status" : "fail",
+                "message" : "User not found."
+            }
+
+            return response_object, 401
+
+    else:
+        response_object = {
+            "status": "fail",
+            "message": "Provide a valid auth token."
+        }
+
+        return response_object, 401

@@ -6,10 +6,11 @@ from app.main.services.help import Helper
 
 def login_user(data):
     try:
+        print(data.get("usernameOrEmail"))
         user = User.query.filter_by(email=data.get("usernameOrEmail")).first()
 
         if user and user.check_password(data.get("password")):
-            auth_token = user.encode_auth_token(user.public_id)
+            auth_token = Helper.encode_auth_token(user.public_id)
 
             if auth_token:
                 return Helper.return_resp_obj("success", {"message" : "Successfully logged in.", "username" : user.username}, auth_token, 200)
@@ -18,7 +19,7 @@ def login_user(data):
             user = User.query.filter_by(username=data.get("usernameOrEmail")).first()
 
             if user and user.check_password(data.get("password")):
-                auth_token = user.encode_auth_token(user.public_id)
+                auth_token = Helper.encode_auth_token(user.public_id)
 
                 if auth_token:
                     return Helper.return_resp_obj("success", {"message" : "Successfully logged in.", "username" : user.username}, auth_token, 200)
@@ -59,33 +60,3 @@ def logout_user(data):
         }
 
         return response_object, 403
-
-def get_logged_in_user(new_request):
-    auth_token = new_request.headers.get("Authorization")
-
-    if auth_token:
-        resp = User.decode_auth_token(auth_token)
-        user = User.query.filter_by(public_id=resp).first()
-        
-        if user:
-            response_object = {
-                "status": "success",
-                "data": {
-                    "firstName" : user.first_name,
-                    "lastName" : user.last_name,
-                    "email" : user.email,
-                    "username" : user.username,
-                    "contactNo" : user.contact_no,
-                    "admin": user.admin,
-                    "registeredOn": str(user.registered_on)
-                }
-            }
-
-            return response_object, 200
-
-    else:
-        response_object = {
-            "status": "fail",
-            "message": "Provide a valid auth token."
-        }
-        return response_object, 401

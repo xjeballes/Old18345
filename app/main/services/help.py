@@ -17,7 +17,7 @@ class Helper:
         return response_obj, code
         
     @staticmethod
-    def save_changes(method, data):
+    def save_changes(data):
         db.session.add(data)
 
         db.session.commit()
