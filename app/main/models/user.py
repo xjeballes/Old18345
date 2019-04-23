@@ -2,13 +2,13 @@ from .. import db, flask_bcrypt
 from app.main.models import business, circle
 
 user_business_rel = db.Table("user_business_rel",
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
-    db.Column("business_id", db.Integer, db.ForeignKey("business.id"))
+    db.Column("user_id", db.String, db.ForeignKey("user.public_id")),
+    db.Column("business_id", db.String, db.ForeignKey("business.public_id"))
 )
 
 user_circle_rel = db.Table("user_circle_rel",
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
-    db.Column("circle_id", db.Integer, db.ForeignKey("circle.id"))
+    db.Column("user_id", db.String, db.ForeignKey("user.public_id")),
+    db.Column("circle_id", db.String, db.ForeignKey("circle.public_id"))
 )
 
 class User(db.Model):

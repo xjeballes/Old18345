@@ -1,46 +1,56 @@
-import uuid
-import datetime
-
+import uuid, datetime
 from app.main import db
 from app.main.models.circle import Circle
+from app.main.services.help import Helper
 
+def save_new_circle(data):
+    new_circle = Circle(
+        public_id = str(uuid.uuid4()),
+        circle_name = data["circleName"]
+    )
 
-def create_new_circle(data):
-    circle = Circle.query.filter_by(email=data['email']).first()
-    if not circle:
-        new_circle = Circle(
-            circle_name=str(uuid.uuid4()),
-            email=data['email'],
-            contact_num=data['contact_num'],
-            registered_on=datetime.datetime.utcnow()
-        )
-        save_changes(new_circle)
-        response_object = {
-            'status': 'success',
-            'message': 'circle created'
-        }
-        return response_object, 200
-    else:
-        response_object = {
-            'status': 'fail',
-            'message': 'This circle already exists.',
-        }
-        return response_object, 409
+    Helper.save_changes(new_circle)
 
+    return Helper.generate_token(new_circle)
 
-def get_all_circle():
+def get_all_circles():
     return Circle.query.all()
 
+def get_a_circle(public_id):
+    return Circle.query.filter_by(public_id=public_id).first()
 
-def get_circle(circle_name):
-    return Circle.query.filter_by(circle_name=circle_name).first()
+def delete_circle(public_id):
+    circle = Circle.query.filter_by(public_id=public_id).first()
 
+    if circle:
+        db.session.delete(circle)
 
-def delete_circle(circle_name):
-    db.session.delete(circle_name)
+        db.session.commit()
+
+        return Helper.return_resp_obj("success", "Circle deleted successfully.", None, 200)
+
+    else:
+        return Helper.return_resp_obj("fail", "No circle found.", None, 409)
+
+def update_circle(public_id, data):
+    circle = Circle.query.filter_by(public_id=public_id).first()
+    
+    circle.circle_name = data["circleName"]
+
     db.session.commit()
 
+    return Helper.return_resp_obj("success", "Circle updated successfully.", None, 200)
 
 def save_changes(data):
     db.session.add(data)
+
     db.session.commit()
+
+def generate_token(circle):
+    try:
+        auth_token = Helper.encode_auth_token(circle.public_id)
+
+        return Helper.return_resp_obj("success", "Circle registered successfully.", auth_token, 201)
+
+    except Exception as e:
+        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

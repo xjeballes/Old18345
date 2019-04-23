@@ -16,7 +16,9 @@ def create_app(config_name):
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:8080/')
+        response.headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:8080")
+        response.headers.add("Access-Control-Allow-Headers", "Authorization")
+
         return response
 
     return app

@@ -6,6 +6,13 @@ from app.main.services.help import Helper
 def save_new_user(data):
     user = User.query.filter_by(email=data["email"]).first()
 
+    check_first_user = User.query.filter_by(id=1).first()
+    
+    if not check_first_user:
+        is_admin = True
+    else:
+        is_admin = False
+        
     if not user:
         new_user = User(
             public_id = str(uuid.uuid4()),
@@ -15,7 +22,8 @@ def save_new_user(data):
             username = data["username"],
             password = data["password"],
             contact_no = data["contactNo"],
-            registered_on = datetime.datetime.utcnow()
+            registered_on = datetime.datetime.utcnow(),
+            admin = is_admin
         )
 
         Helper.save_changes(new_user)
@@ -39,7 +47,7 @@ def delete_user(username):
 
         db.session.commit()
 
-        return Helper.return_resp_obj("success", "User has been deleted.", None, 200)
+        return Helper.return_resp_obj("success", "User deleted successfully.", None, 200)
 
     else:
         return Helper.return_resp_obj("fail", "No user found.", None, 409)
@@ -57,10 +65,10 @@ def update_user(username, data):
 
             db.session.commit()
 
-            return Helper.return_resp_obj("success", "User has been updated.", None, 200)
+            return Helper.return_resp_obj("success", "User updated successfully.", None, 200)
 
         else:
-            return Helper.return_resp_obj("fail", "Email or username has already been used.", None, 409)
+            return Helper.return_resp_obj("fail", "Email or username is already used.", None, 409)
     else:
         return Helper.return_resp_obj("fail", "No user found.", None, 409)
 
@@ -68,9 +76,9 @@ def get_logged_in_user(new_request):
     auth_token = new_request.headers.get("Authorization")
 
     if auth_token:
-        resp = Helper.decode_auth_token(auth_token)
-
-        user = User.query.filter_by(public_id=resp).first()
+        public_id_resp = Helper.decode_auth_token(auth_token)
+        
+        user = User.query.filter_by(public_id=public_id_resp).first()
 
         if user:
             response_object = {
@@ -81,8 +89,8 @@ def get_logged_in_user(new_request):
                     "email" : user.email,
                     "username" : user.username,
                     "contactNo" : user.contact_no,
-                    "admin": user.admin,
-                    "registeredOn": str(user.registered_on)
+                    "admin" : user.admin,
+                    "registeredOn" : str(user.registered_on)
                 }
             }
 
@@ -91,7 +99,7 @@ def get_logged_in_user(new_request):
         else:
             response_object = {
                 "status" : "fail",
-                "message" : "User not found."
+                "message" : "No user found."
             }
 
             return response_object, 401
@@ -99,7 +107,7 @@ def get_logged_in_user(new_request):
     else:
         response_object = {
             "status": "fail",
-            "message": "Provide a valid auth token."
+            "message": "Provide a valid authorized token."
         }
 
         return response_object, 401

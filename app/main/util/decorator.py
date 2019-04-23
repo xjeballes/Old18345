@@ -26,12 +26,12 @@ def admin_token_required(f):
         if not token:
             return data, status
 
-        admin = token.get('admin')
+        admin = token.get("admin")
 
         if not admin:
             response_object = {
                 "status" : "fail",
-                "message" : "admin token required"
+                "message" : "Administrative token is required."
             }
 
             return response_object, 401

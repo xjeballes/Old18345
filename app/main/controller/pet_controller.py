@@ -26,19 +26,18 @@ class PetList(Resource):
 @api.route("/<public_id>")
 @api.param("public_id", "The Pet identifier")
 @api.response(404, "Pet not found.")
-class User(Resource):
+class Pet(Resource):
     @token_required
     @api.doc("get a pet")
     @api.marshal_with(_pet)
     def get(self, public_id):
-        if public_id:
-            pet = get_a_pet(public_id)
+        pet = get_a_pet(public_id)
 
-            if not pet:
-                api.abort(404)
+        if not pet:
+            api.abort(404)
 
-            else:
-                return pet
+        else:
+            return pet
 
     @token_required
     @api.doc("delete a pet")
@@ -54,9 +53,10 @@ class User(Resource):
     @token_required
     @api.doc("update a pet", parser=parser)
     def put(self, public_id):
-        data = request.form
+        post_data = request.json
 
-        pet = update_pet(public_id=public_id, data=data)
+        pet = update_pet(public_id=public_id, data=post_data)
+        
         if not pet:
             api.abort(404)
 

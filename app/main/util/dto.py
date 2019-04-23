@@ -53,11 +53,13 @@ class SpecieDto:
     api = Namespace("specie", description="specie related operations")
 
     specie = api.model("specie", {
+        "public_id" : fields.String(required=True, description="specie public id"),
         "specie_name" : fields.String(required=True, description="specie name")
     })
 
     parser = api.parser()
 
+    parser.add_argument("public_id", type=str, help="specie public id", location="form")
     parser.add_argument("specie_name", type=str, help="specie name", location="form")
 
 class BreedDto:
@@ -65,13 +67,13 @@ class BreedDto:
 
     breed = api.model("breed", {
         "breed_name": fields.String(required=True, description="breed name"),
-        "specie_id": fields.String(required=False, description="breed specie")
+        "public_id" : fields.String(require=True, description="breed public id")
     })
 
     parser = api.parser()
 
     parser.add_argument("breed_name", type=str, help="breed name", location="form")
-    parser.add_argument("specie_id", type=int, help="breed specie", location="form")
+    parser.add_argument("public_id", type=str, help="breed public id", location="form")
 
 class CircleDto:
     api = Namespace("circle", description="circle related operations")

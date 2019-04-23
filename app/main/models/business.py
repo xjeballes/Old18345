@@ -4,6 +4,7 @@ class Business(db.Model):
     __tablename__ = "business"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    public_id = db.Column(db.String(100), unique=True)
     business_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     contact_no = db.Column(db.String(20), nullable=True)

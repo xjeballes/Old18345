@@ -5,6 +5,7 @@ class Specie(db.Model):
     __tablename__ = "specie"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    public_id = db.Column(db.String(100), unique=True)
     specie_name = db.Column(db.String(100), unique=True, nullable=False)
 
     has_breeds = db.relationship("Breed", backref="specie", lazy=True)

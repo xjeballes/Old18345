@@ -19,14 +19,7 @@ class UserList(Resource):
     @api.response(201, "User successfully created.")
     @api.doc("register a user", parser=parser)
     def post(self):
-<<<<<<< HEAD
         post_data = request.json
-=======
-        """Creates a new User """
-        data = request.form
-        # data = request.json
-        return save_new_user(data=data)
->>>>>>> cffd89c85a4e198c7c845a0c82d399f16a11e6e6
 
         return save_new_user(data=post_data)
 
@@ -38,14 +31,13 @@ class User(Resource):
     @api.doc("get a user")
     @api.marshal_with(_user)
     def get(self, username):
-        if username:
-            user = get_a_user(username)
+        user = get_a_user(username)
 
-            if not user:
-                api.abort(404)
+        if not user:
+            api.abort(404)
 
-            else:
-                return user
+        else:
+            return user
 
     @token_required
     @api.doc("delete a user")
@@ -61,9 +53,9 @@ class User(Resource):
     @token_required
     @api.doc("update a user", parser=parser)
     def put(self, username):
-        data = request.form
+        post_data = request.json
 
-        user = update_user(username=username, data=data)
+        user = update_user(username=username, data=post_data)
         if not user:
             api.abort(404)
 

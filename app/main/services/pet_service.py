@@ -1,5 +1,4 @@
 import uuid, datetime
-
 from app.main import db
 from app.main.models.pet import Pet
 from app.main.services.help import Helper
@@ -12,9 +11,9 @@ def save_new_pet(data):
         registered_on = datetime.datetime.utcnow()
     )
 
-    Helper.save_changes(new_user)
+    Helper.save_changes(new_pet)
 
-    return Helper.generate_token(new_user)
+    return Helper.generate_token(new_pet)
 
 def get_all_pets():
     return Pet.query.all()
@@ -30,7 +29,7 @@ def delete_pet(public_id):
 
         db.session.commit()
 
-        return Helper.return_resp_obj("success", "Pet has been deleted.", None, 200)
+        return Helper.return_resp_obj("success", "Pet deleted successfully.", None, 200)
 
     else:
         return Helper.return_resp_obj("fail", "No pet found.", None, 409)
@@ -38,15 +37,12 @@ def delete_pet(public_id):
 def update_pet(public_id, data):
     pet = Pet.query.filter_by(public_id=public_id).first()
     
-    user.first_name = data["firstName"]
-    user.last_name = data["lastName"]
-    user.email = data["email"]
-    user.username = data["username"]
-    user.contact_no = data["contactNo"]
+    pet.pet_name = data["petName"]
+    pet.sex = data["sex"]
 
     db.session.commit()
 
-    return Helper.return_resp_obj("success", "User has been updated.", None, 200)
+    return Helper.return_resp_obj("success", "Pet updated successfully.", None, 200)
 
 def save_changes(data):
     db.session.add(data)
@@ -57,7 +53,7 @@ def generate_token(pet):
     try:
         auth_token = Helper.encode_auth_token(pet.public_id)
 
-        return Helper.return_resp_obj("success", "Pet is successfully registered.", auth_token, 201)
+        return Helper.return_resp_obj("success", "Pet registered successfully.", auth_token, 201)
 
     except Exception as e:
         return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

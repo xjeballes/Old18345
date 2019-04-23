@@ -1,9 +1,10 @@
 from .. import db
 from app.main.models import specie
 
-pet_specie_rel = db.Table("pet_specie_rel",
-    db.Column("pet_id", db.Integer, db.ForeignKey("pet.id")),
-    db.Column("specie_id", db.Integer, db.ForeignKey("specie.id"))
+pet_kind_rel = db.Table("pet_kind_rel",
+    db.Column("pet_id", db.String, db.ForeignKey("pet.public_id")),
+    db.Column("specie_id", db.String, db.ForeignKey("specie.public_id")),
+    db.Column("breed_id", db.String, db.ForeignKey("breed.public_id"))
 )
 
 class Pet(db.Model):
@@ -17,7 +18,7 @@ class Pet(db.Model):
 
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
-    specie_rel = db.relationship("Specie", secondary=pet_specie_rel, backref=db.backref("pet", lazy=True))
+    specie_rel = db.relationship("Specie", secondary=pet_kind_rel, backref=db.backref("pet", lazy=True))
 
     def __repr__(self):
         return "<pet '{}'>".format(self.pet_name)
