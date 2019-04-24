@@ -1,51 +1,64 @@
 from flask import request
 from flask_restplus import Resource
-
 from ..util.dto import BusinessDto
 from ..util.decorator import token_required
-from ..services.business_service import create_new_business, delete_business, get_all_business, get_business
+from ..services.business_service import save_new_business, get_all_businesses, get_a_business, delete_business, update_business
 
 api = BusinessDto.api
 _business = BusinessDto.business
+parser = BusinessDto.parser
 
-
-@api.route('/')
+@api.route("/")
 class BusinessList(Resource):
     @token_required
-    @api.doc('list_of_businesses')
-    @api.marshal_list_with(_business, envelope='data')
+    @api.doc("show list of all registered businesss")
+    @api.marshal_list_with(_business, envelope="data")
     def get(self):
-        return get_all_business()
+        return get_all_businesses()
 
-    @token_required
-    @api.response(201, 'Your business has been created successfully.')
-    @api.doc('create a new business')
-    @api.expect(_business, validate=True)
+    @api.response(201, "Business successfully created.")
+    @api.doc("register a business", parser=parser)
     def post(self):
-        data = request.json
-        return create_new_business(data=data)
+        post_data = request.json
 
+        return save_new_business(data=post_data)
 
-@api.route('/<business_name>')
-@api.param('business_name', 'business identifier')
-@api.response(404, 'User not found.')
-class business(Resource):
+@api.route("/<public_id>")
+@api.param("public_id", "The business identifier")
+@api.response(404, "Business not found.")
+class Business(Resource):
     @token_required
-    @api.doc('get a business')
+    @api.doc("get a business")
     @api.marshal_with(_business)
-    def get(self, business_name):
-        business = get_business(business_name)
+    def get(self, public_id):
+        business = get_a_business(public_id)
+
         if not business:
             api.abort(404)
+
         else:
             return business
 
     @token_required
-    @api.doc('remove a business')
-    @api.marshal_with(_business)
-    def delete(self, business_name):
-        business = delete_business(business_name)
+    @api.doc("delete a business")
+    def delete(self, public_id):
+        business = delete_business(public_id)
+
         if not business:
             api.abort(404)
+            
+        else:
+            return business
+
+    @token_required
+    @api.doc("update a business", parser=parser)
+    def put(self, public_id):
+        post_data = request.json
+
+        business = update_business(public_id=public_id, data=post_data)
+        
+        if not business:
+            api.abort(404)
+
         else:
             return business
