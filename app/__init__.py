@@ -19,6 +19,7 @@ api = Api(blueprint,
 
 api.add_namespace(user_ns, path="/user")
 api.add_namespace(auth_ns, path="/auth")
+api.add_namespace(pet_ns, path="/pet")
 api.add_namespace(specie_ns, path="/specie")
 api.add_namespace(breed_ns, path="/breed")
 api.add_namespace(business_ns, path="/business")

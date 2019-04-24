@@ -23,6 +23,12 @@ class Helper:
         db.session.commit()
 
     @staticmethod
+    def execute_changes(data):
+        db.session.execute(data)
+
+        db.session.commit()
+
+    @staticmethod
     def generate_token(model_name, model):
         try:
             auth_token = Helper.encode_auth_token(model.public_id)

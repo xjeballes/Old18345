@@ -1,17 +1,25 @@
 import uuid, datetime
 from app.main import db
-from app.main.models.pet import Pet
+from app.main.models.user import User
+from app.main.models.pet import Pet, pet_kind_rel
 from app.main.services.help import Helper
 
 def save_new_pet(data):
+    new_public_id = str(uuid.uuid4())
+    ownerId = User.query.filter_by(username=data["ownerUsername"]).first()
     new_pet = Pet(
-        public_id = str(uuid.uuid4()),
+        public_id = new_public_id,
         pet_name = data["petName"],
         sex = data["sex"],
+        owner_id = ownerId.id,
         registered_on = datetime.datetime.utcnow()
     )
 
     Helper.save_changes(new_pet)
+
+    statement = pet_kind_rel.insert().values(pet_id=new_public_id, specie_id=data["specieId"], breed_id=data["breedId"])
+            
+    Helper.execute_changes(statement)
 
     return Helper.generate_token("Pet", new_pet)
 
