@@ -12,7 +12,7 @@ class Helper:
             }
 
         if token:
-            response_obj["Authorization"] = token.decode()
+            response_obj["authorization"] = token.decode()
 
         return response_obj, code
         
@@ -23,11 +23,11 @@ class Helper:
         db.session.commit()
 
     @staticmethod
-    def generate_token(user):
+    def generate_token(model_name, model):
         try:
-            auth_token = Helper.encode_auth_token(user.public_id)
+            auth_token = Helper.encode_auth_token(model.public_id)
 
-            return Helper.return_resp_obj("success", "User is successfully registered.", auth_token, 201)
+            return Helper.return_resp_obj("success", "{} is successfully registered.".format(model_name), auth_token, 201)
 
         except Exception as e:
             return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

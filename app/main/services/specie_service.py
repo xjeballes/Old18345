@@ -11,7 +11,7 @@ def save_new_specie(data):
 
     Helper.save_changes(new_specie)
 
-    return Helper.generate_token(new_specie)
+    return Helper.generate_token("Specie", new_specie)
 
 def get_all_species():
     return Specie.query.all()
@@ -40,17 +40,3 @@ def update_specie(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Specie updated successfully.", None, 200)
-
-def save_changes(data):
-    db.session.add(data)
-
-    db.session.commit()
-
-def generate_token(specie):
-    try:
-        auth_token = Helper.encode_auth_token(specie.public_id)
-
-        return Helper.return_resp_obj("success", "Specie registered successfully.", auth_token, 201)
-
-    except Exception as e:
-        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

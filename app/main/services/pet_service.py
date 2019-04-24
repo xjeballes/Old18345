@@ -13,7 +13,7 @@ def save_new_pet(data):
 
     Helper.save_changes(new_pet)
 
-    return Helper.generate_token(new_pet)
+    return Helper.generate_token("Pet", new_pet)
 
 def get_all_pets():
     return Pet.query.all()
@@ -43,17 +43,3 @@ def update_pet(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Pet updated successfully.", None, 200)
-
-def save_changes(data):
-    db.session.add(data)
-
-    db.session.commit()
-
-def generate_token(pet):
-    try:
-        auth_token = Helper.encode_auth_token(pet.public_id)
-
-        return Helper.return_resp_obj("success", "Pet registered successfully.", auth_token, 201)
-
-    except Exception as e:
-        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

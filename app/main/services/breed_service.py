@@ -12,7 +12,7 @@ def save_new_breed(data):
 
     Helper.save_changes(new_breed)
 
-    return Helper.generate_token(new_breed)
+    return Helper.generate_token("Breed", new_breed)
 
 def get_all_breeds():
     return Breed.query.all()
@@ -44,17 +44,3 @@ def update_breed(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Breed updated successfully.", None, 200)
-
-def save_changes(data):
-    db.session.add(data)
-
-    db.session.commit()
-
-def generate_token(breed):
-    try:
-        auth_token = Helper.encode_auth_token(breed.public_id)
-
-        return Helper.return_resp_obj("success", "Breed registered successfully.", auth_token, 201)
-
-    except Exception as e:
-        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

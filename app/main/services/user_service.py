@@ -28,7 +28,7 @@ def save_new_user(data):
 
         Helper.save_changes(new_user)
 
-        return Helper.generate_token(new_user)
+        return Helper.generate_token("User", new_user)
 
     else:
         return Helper.return_resp_obj("fail", "User already exists. Please log in instead.", None, 409)

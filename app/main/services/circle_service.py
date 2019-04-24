@@ -11,7 +11,7 @@ def save_new_circle(data):
 
     Helper.save_changes(new_circle)
 
-    return Helper.generate_token(new_circle)
+    return Helper.generate_token("Circle", new_circle)
 
 def get_all_circles():
     return Circle.query.all()
@@ -40,17 +40,3 @@ def update_circle(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Circle updated successfully.", None, 200)
-
-def save_changes(data):
-    db.session.add(data)
-
-    db.session.commit()
-
-def generate_token(circle):
-    try:
-        auth_token = Helper.encode_auth_token(circle.public_id)
-
-        return Helper.return_resp_obj("success", "Circle registered successfully.", auth_token, 201)
-
-    except Exception as e:
-        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)

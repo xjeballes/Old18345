@@ -13,7 +13,7 @@ def save_new_business(data):
 
     Helper.save_changes(new_business)
 
-    return Helper.generate_token(new_business)
+    return Helper.generate_token("Business", new_business)
 
 def get_all_businesses():
     return Business.query.all()
@@ -42,17 +42,3 @@ def update_business(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Business updated successfully.", None, 200)
-
-def save_changes(data):
-    db.session.add(data)
-
-    db.session.commit()
-
-def generate_token(business):
-    try:
-        auth_token = Helper.encode_auth_token(business.public_id)
-
-        return Helper.return_resp_obj("success", "Business registered successfully.", auth_token, 201)
-
-    except Exception as e:
-        return Helper.return_resp_obj("fail", "Some error occured.", None, 401)
