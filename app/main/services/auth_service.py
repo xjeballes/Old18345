@@ -12,7 +12,7 @@ def login_user(data):
             auth_token = Helper.encode_auth_token(user.public_id)
 
             if auth_token:
-                return Helper.return_resp_obj("success", {"message" : "Successfully logged in.", "username" : user.username}, auth_token, 200)
+                return Helper.return_resp_obj("success", "Successfully logged in.", auth_token, 200)
 
         elif user is None:
             user = User.query.filter_by(username=data.get("usernameOrEmail")).first()
@@ -21,7 +21,7 @@ def login_user(data):
                 auth_token = Helper.encode_auth_token(user.public_id)
 
                 if auth_token:
-                    return Helper.return_resp_obj("success", {"message" : "Successfully logged in.", "username" : user.username}, auth_token, 200)
+                    return Helper.return_resp_obj("success", "Successfully logged in.", auth_token, 200)
 
             else:
                 return Helper.return_resp_obj("fail", "Log in unsuccessful. Try again.", None, 401)

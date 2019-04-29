@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 from ..util.dto import UserDto
 from ..util.decorator import token_required
-from ..services.user_service import save_new_user, get_all_users, get_a_user, delete_user, update_user
+from ..services.user_service import save_new_user, get_all_users, get_a_user, delete_user, update_user, get_logged_in_user
 
 api = UserDto.api
 _user = UserDto.user
@@ -10,11 +10,16 @@ parser = UserDto.parser
 
 @api.route("/")
 class UserList(Resource):
-    @token_required
-    @api.doc("show list of all registered users")
-    @api.marshal_list_with(_user, envelope="data")
+    @api.doc("show current user")
     def get(self):
-        return get_all_users()
+        data, status = get_logged_in_user(request)
+
+        payload = data.get("data")
+        
+        if not payload:
+            return data, status
+
+        return payload
 
     @api.response(201, "User successfully created.")
     @api.doc("register a user", parser=parser)

@@ -23,6 +23,6 @@ class UserLogin(Resource):
 class LogoutAPI(Resource):
     @api.doc("logout a user")
     def post(self):
-        post_data = request.headers.get("Authorization")
+        post_data = request.headers.get("authorization")
         
         return logout_user(data=post_data)

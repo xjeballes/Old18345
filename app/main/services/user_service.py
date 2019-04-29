@@ -73,7 +73,7 @@ def update_user(username, data):
         return Helper.return_resp_obj("fail", "No user found.", None, 409)
 
 def get_logged_in_user(new_request):
-    auth_token = new_request.headers.get("Authorization")
+    auth_token = new_request.headers.get("authorization")
 
     if auth_token:
         public_id_resp = Helper.decode_auth_token(auth_token)
@@ -99,7 +99,7 @@ def get_logged_in_user(new_request):
         else:
             response_object = {
                 "status" : "fail",
-                "message" : "No user found."
+                "message": "Provide a valid authorized token."
             }
 
             return response_object, 401
