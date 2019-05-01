@@ -51,3 +51,22 @@ def update_pet(public_id, data):
     db.session.commit()
 
     return Helper.return_resp_obj("success", "Pet updated successfully.", None, 200)
+
+def get_user_pets(user_id):
+    user_id = User.query.filter_by(public_id=user_id).first().id
+    pets = db.session.query(Pet.pet_name, Pet.public_id, Pet.sex, Specie.specie_name, Breed.breed_name).filter(Pet.public_id==pet_kind_rel.c.pet_id).filter(pet_kind_rel.c.specie_id==Specie.public_id).filter(pet_kind_rel.c.breed_id==Breed.public_id).filter(Pet.owner_id==user_id).all()
+    print(pets)
+    pet_list = []
+    
+    for x, pet in enumerate(pets):
+        pet_obj = {}
+        
+        pet_obj["pet_name"] = pet[0]
+        pet_obj["public_id"] = pet[1]
+        pet_obj["sex"] = pet[2]
+        pet_obj["specie_name"] = pet[3]
+        pet_obj["breed_name"] = pet[4]
+
+        pet_list.append(pet_obj)
+
+    return pet_list

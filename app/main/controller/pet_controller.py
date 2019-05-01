@@ -62,3 +62,19 @@ class Pet(Resource):
 
         else:
             return pet
+
+@api.route("/user/<user_id>")
+@api.param("user_id", "Pets of a specific owner")
+@api.response(404, "Pets not found.")
+class UserPets(Resource):
+    @token_required
+    @api.doc("get pets with specific owner")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, user_id):
+        pets = get_user_pets(user_id=user_id)
+        
+        if not pets:
+            api.abort(404)
+
+        else:
+            return pets
