@@ -18,6 +18,8 @@ class UserDto:
     parser.add_argument("email", type=str, help="user email address", location="form")
     parser.add_argument("username", type=str, help="user username", location="form")
     parser.add_argument("contact_no", type=str, help="user contact number", location="form")
+    parser.add_argument("password", type=str, help="user password", location="form")
+    parser.add_argument("confirm_password", type=str, help="user confirm password", location="form")
 
 class AuthDto:
     api = Namespace("auth", description="authentication related operations")
@@ -37,17 +39,19 @@ class PetDto:
 
     pet = api.model("pet", {
         "pet_name" : fields.String(required=True, description="pet name"),
-        "sex" : fields.String(required=False, description="pet sex"),
-        "specie_id" : fields.Integer(required=False, description="pet specie"),
-        "breed_id" : fields.Integer(required=False, description="pet breed")
+        "public_id" : fields.String(required=True, description="pet public id"),
+        "sex" : fields.String(required=True, description="pet sex"),
+        "specie_name" : fields.String(required=True, description="pet specie"),
+        "breed_name" : fields.String(required=True, description="pet breed")
     })
 
     parser = api.parser()
 
     parser.add_argument("pet_name", type=str, help="pet name", location="form")
+    parser.add_argument("public_id", type=str, help="pet public id", location="form")
     parser.add_argument("sex", type=str, help="pet sex", location="form")
-    parser.add_argument("specie_id", type=int, help="pet specie", location="form")
-    parser.add_argument("breed_id", type=int, help="pet breed", location="form")
+    parser.add_argument("specie_name", type=str, help="pet specie", location="form")
+    parser.add_argument("breed_name", type=str, help="pet breed", location="form")
 
 class SpecieDto:
     api = Namespace("specie", description="specie related operations")
