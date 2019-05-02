@@ -2,16 +2,20 @@ import uuid, datetime
 from app.main import db
 from app.main.models.user import User
 from app.main.models.pet import Pet, pet_kind_rel
+from app.main.models.specie import Specie
+from app.main.models.breed import Breed
 from app.main.services.help import Helper
 
-def save_new_pet(data):
+def save_new_pet(data, username):
     new_public_id = str(uuid.uuid4())
-    ownerId = User.query.filter_by(username=data["ownerUsername"]).first()
+
+    owner = User.query.filter_by(username=username).first()
+    
     new_pet = Pet(
         public_id = new_public_id,
         pet_name = data["petName"],
         sex = data["sex"],
-        owner_id = ownerId.id,
+        owner_id = owner.id,
         registered_on = datetime.datetime.utcnow()
     )
 
@@ -52,10 +56,10 @@ def update_pet(public_id, data):
 
     return Helper.return_resp_obj("success", "Pet updated successfully.", None, 200)
 
-def get_user_pets(user_id):
-    user_id = User.query.filter_by(public_id=user_id).first().id
+def get_user_pets(username):
+    user_id = User.query.filter_by(username=username).first().id
     pets = db.session.query(Pet.pet_name, Pet.public_id, Pet.sex, Specie.specie_name, Breed.breed_name).filter(Pet.public_id==pet_kind_rel.c.pet_id).filter(pet_kind_rel.c.specie_id==Specie.public_id).filter(pet_kind_rel.c.breed_id==Breed.public_id).filter(Pet.owner_id==user_id).all()
-    print(pets)
+    
     pet_list = []
     
     for x, pet in enumerate(pets):

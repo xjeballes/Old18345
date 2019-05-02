@@ -19,12 +19,13 @@ class BreedList(Resource):
     @api.response(201, "Breed successfully created.")
     @api.doc("register a breed", parser=parser)
     def post(self):
+        
         post_data = request.json
 
         return save_new_breed(data=post_data)
 
 @api.route("/specie/<specie_id>")
-@api.param("specie_id", "Breeds  specific specie")
+@api.param("specie_id", "Breeds with specific specie")
 @api.response(404, "Breeds not found.")
 class SpecieBreeds(Resource):
     @token_required

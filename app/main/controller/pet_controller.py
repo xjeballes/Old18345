@@ -2,7 +2,9 @@ from flask import request
 from flask_restplus import Resource
 from ..util.dto import PetDto
 from ..util.decorator import token_required
-from ..services.pet_service import save_new_pet, get_all_pets, get_a_pet, delete_pet, update_pet, get_user_pets
+from ..services.user_service import get_logged_in_user
+from ..services.pet_service import *
+from ..services.help import Helper
 
 api = PetDto.api
 _pet = PetDto.pet
@@ -16,12 +18,33 @@ class PetList(Resource):
     def get(self):
         return get_all_pets()
 
+    @token_required
     @api.response(201, "Pet successfully created.")
     @api.doc("register a pet", parser=parser)
     def post(self):
         post_data = request.json
 
-        return save_new_pet(data=post_data)
+        user = get_logged_in_user(request)
+        
+        user_username = user[0]["data"]["username"]
+        
+        return save_new_pet(data=post_data, username=user_username)
+
+@api.route("/user/<username>")
+@api.param("username", "Pets of a specific owner")
+@api.response(404, "Pets not found.")
+class UserPets(Resource):
+    @token_required
+    @api.doc("get pets with specific owner")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, username):
+        pets = get_user_pets(username=username)
+        
+        if not pets:
+            api.abort(404)
+
+        else:
+            return pets
 
 @api.route("/<public_id>")
 @api.param("public_id", "The Pet identifier")
@@ -62,19 +85,3 @@ class Pet(Resource):
 
         else:
             return pet
-
-@api.route("/user/<user_id>")
-@api.param("user_id", "Pets of a specific owner")
-@api.response(404, "Pets not found.")
-class UserPets(Resource):
-    @token_required
-    @api.doc("get pets with specific owner")
-    @api.marshal_list_with(_pet, envelope="data")
-    def get(self, user_id):
-        pets = get_user_pets(user_id=user_id)
-        
-        if not pets:
-            api.abort(404)
-
-        else:
-            return pets
