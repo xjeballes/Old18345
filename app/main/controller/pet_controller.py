@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 from ..util.dto import PetDto
 from ..util.decorator import token_required
-from ..services.pet_service import save_new_pet, get_all_pets, get_a_pet, delete_pet, update_pet
+from ..services.pet_service import save_new_pet, get_all_pets, get_a_pet, delete_pet, update_pet, get_user_pets
 
 api = PetDto.api
 _pet = PetDto.pet
