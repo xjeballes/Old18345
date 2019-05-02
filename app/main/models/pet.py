@@ -14,6 +14,8 @@ class Pet(db.Model):
     public_id = db.Column(db.String(100), unique=True)
     pet_name = db.Column(db.String(100), nullable=False)
     sex = db.Column(db.String(100), nullable=False)
+    profPic_filename = db.Column(db.String(50), nullable=False, default="pet-default-profPic.jpg")
+    profPic_sm_filename = db.Column(db.String(50), nullable=False, default="pet-default-profPic-sm.jpg")
     registered_on = db.Column(db.DateTime, nullable=False)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))

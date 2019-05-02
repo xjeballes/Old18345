@@ -39,12 +39,8 @@ class UserPets(Resource):
     @api.marshal_list_with(_pet, envelope="data")
     def get(self, username):
         pets = get_user_pets(username=username)
-        
-        if not pets:
-            api.abort(404)
 
-        else:
-            return pets
+        return pets
 
 @api.route("/<public_id>")
 @api.param("public_id", "The Pet identifier")
