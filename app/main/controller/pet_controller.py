@@ -42,6 +42,30 @@ class UserPets(Resource):
 
         return pets
 
+@api.route("/specie/<specie_id>")
+@api.param("specie_id", "Pets with specific specie")
+@api.response(404, "Pets not found.")
+class SpeciePets(Resource):
+    @token_required
+    @api.doc("get pets with specific specie")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, specie_id):
+        pets = get_specie_pets(specie_id=specie_id)
+
+        return pets
+
+@api.route("/breed/<breed_id>")
+@api.param("breed_id", "Pets with specific breed")
+@api.response(404, "Pets not found.")
+class SpeciePets(Resource):
+    @token_required
+    @api.doc("get pets with specific breed")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, breed_id):
+        pets = get_breed_pets(breed_id=breed_id)
+
+        return pets
+
 @api.route("/<public_id>")
 @api.param("public_id", "The Pet identifier")
 @api.response(404, "Pet not found.")

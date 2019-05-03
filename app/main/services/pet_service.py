@@ -78,3 +78,43 @@ def get_user_pets(username):
         pet_list.append(pet_obj)
 
     return pet_list
+
+def get_specie_pets(specie_id):
+    pets = db.session.query(Pet.pet_name, Pet.public_id, Pet.sex, Specie.specie_name, Breed.breed_name, Pet.profPic_filename, Pet.profPic_sm_filename).filter(Pet.public_id==pet_kind_rel.c.pet_id).filter(pet_kind_rel.c.specie_id==Specie.public_id).filter(pet_kind_rel.c.breed_id==Breed.public_id).filter(pet_kind_rel.c.specie_id==specie_id).all()
+    
+    pet_list = []
+    
+    for x, pet in enumerate(pets):
+        pet_obj = {}
+        
+        pet_obj["pet_name"] = pet[0]
+        pet_obj["public_id"] = pet[1]
+        pet_obj["sex"] = pet[2]
+        pet_obj["specie_name"] = pet[3]
+        pet_obj["breed_name"] = pet[4]
+        pet_obj["profPic_filename"] = pet[5]
+        pet_obj["profPic_sm_filename"] = pet[6]
+
+        pet_list.append(pet_obj)
+
+    return pet_list
+
+def get_breed_pets(breed_id):
+    pets = db.session.query(Pet.pet_name, Pet.public_id, Pet.sex, Specie.specie_name, Breed.breed_name, Pet.profPic_filename, Pet.profPic_sm_filename).filter(Pet.public_id==pet_kind_rel.c.pet_id).filter(pet_kind_rel.c.specie_id==Specie.public_id).filter(pet_kind_rel.c.breed_id==Breed.public_id).filter(pet_kind_rel.c.breed_id==breed_id).all()
+    
+    pet_list = []
+    
+    for x, pet in enumerate(pets):
+        pet_obj = {}
+        
+        pet_obj["pet_name"] = pet[0]
+        pet_obj["public_id"] = pet[1]
+        pet_obj["sex"] = pet[2]
+        pet_obj["specie_name"] = pet[3]
+        pet_obj["breed_name"] = pet[4]
+        pet_obj["profPic_filename"] = pet[5]
+        pet_obj["profPic_sm_filename"] = pet[6]
+
+        pet_list.append(pet_obj)
+
+    return pet_list

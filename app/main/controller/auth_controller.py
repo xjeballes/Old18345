@@ -9,13 +9,12 @@ api = AuthDto.api
 user_auth = AuthDto.user_auth
 parser = AuthDto.parser
 
-
 @api.route("/login")
 class UserLogin(Resource):
     @api.doc("user login", parser=parser)
     def post(self):
         post_data = request.json
-
+        
         return login_user(data=post_data)
 
 @token_required
