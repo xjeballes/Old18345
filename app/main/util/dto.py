@@ -42,7 +42,9 @@ class PetDto:
         "public_id" : fields.String(required=True, description="pet public id"),
         "sex" : fields.String(required=True, description="pet sex"),
         "specie_name" : fields.String(required=True, description="pet specie"),
-        "breed_name" : fields.String(required=True, description="pet breed")
+        "breed_name" : fields.String(required=True, description="pet breed"),
+        "profPic_filename" : fields.String(required=True, description="pet large profile picture"),
+        "profPic_sm_filename" : fields.String(required=True, description="pet small profile picture")
     })
 
     parser = api.parser()
