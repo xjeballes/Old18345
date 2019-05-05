@@ -30,6 +30,18 @@ class PetList(Resource):
         
         return save_new_pet(data=post_data, username=user_username)
 
+@api.route("/<pet_name>/user/<username>")
+@api.param("username", "Pet of a specific owner")
+@api.response(404, "Pet not found.")
+class UserPet(Resource):
+    @token_required
+    @api.doc("get a pet with specific owner")
+    @api.marshal_with(_pet, envelope="data")
+    def get(self, pet_name, username):
+        pet = get_user_pet(pet_name=pet_name, username=username)
+
+        return pet
+
 @api.route("/user/<username>")
 @api.param("username", "Pets of a specific owner")
 @api.response(404, "Pets not found.")

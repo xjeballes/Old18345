@@ -1,4 +1,4 @@
-import uuid
+import uuid, getpass
 from app.main import db
 from app.main.models.specie import Specie
 from app.main.models.breed import Breed
@@ -34,7 +34,6 @@ def setup_petKindList():
         specie_list.append(specie_obj)
 
     for count, specie in enumerate(specie_list):
-
         specieBreedsList_len = int(input("Please input desired length of {} breed list: ".format(specie["specie_name"])))
 
         for count in range(specieBreedsList_len):
@@ -67,3 +66,7 @@ def setup_petKindList():
 
         db.session.add(breed)
         db.session.commit()
+
+    username = getpass.getuser()
+
+    print("Populated the databases successfully. Thank you, {}. You may now run this API.".format(username))
