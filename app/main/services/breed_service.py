@@ -8,7 +8,7 @@ def save_new_breed(data):
     if not breed:
         new_breed = Breed(
             public_id = breed_id,
-            specie_id = data["specieId"]
+            specie_id = data["specieId"],
             breed_name = data["breedName"]
         )
 
