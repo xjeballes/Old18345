@@ -1,6 +1,6 @@
 import datetime, uuid
 from app.main import db
-from app.main.models.user import User
+from app.main.models.user import User, user_pet_rel
 from app.main.services.help import Helper
 
 def save_new_user(data):
@@ -111,3 +111,22 @@ def get_logged_in_user(new_request):
         }
 
         return response_object, 401
+
+def get_pet_owners(public_id):
+    users = db.session.query(User.first_name, User.last_name, User.bio, User.email, User.username, User.contact_no).filter(user_pet_rel.c.user_id==User.public_id).filter(user_pet_rel.c.pet_id==public_id).all()
+
+    user_list = []
+    
+    for x, user in enumerate(users):
+        user_obj = {}
+        
+        user_obj["first_name"] = user[0]
+        user_obj["last_name"] = user[1]
+        user_obj["bio"] = user[2]
+        user_obj["email"] = user[3]
+        user_obj["username"] = user[4]
+        user_obj["contact_no"] = user[5]
+
+        user_list.append(user_obj)
+
+    return user_list

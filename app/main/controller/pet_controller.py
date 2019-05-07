@@ -11,13 +11,7 @@ _pet = PetDto.pet
 parser = PetDto.parser
 
 @api.route("/")
-class PetList(Resource):
-    @token_required
-    @api.doc("show list of all registered pets")
-    @api.marshal_list_with(_pet, envelope="data")
-    def get(self):
-        return get_all_pets()
-
+class PostPet(Resource):
     @token_required
     @api.response(201, "Pet successfully created.")
     @api.doc("register a pet", parser=parser)
@@ -30,58 +24,10 @@ class PetList(Resource):
         
         return save_new_pet(data=post_data, username=user_username)
 
-@api.route("/<pet_name>/user/<username>")
-@api.param("username", "Pet of a specific owner")
-@api.response(404, "Pet not found.")
-class UserPet(Resource):
-    @token_required
-    @api.doc("get a pet with specific owner")
-    @api.marshal_with(_pet, envelope="data")
-    def get(self, pet_name, username):
-        pet = get_user_pet(pet_name=pet_name, username=username)
-
-        return pet
-
-@api.route("/user/<username>")
-@api.param("username", "Pets of a specific owner")
-@api.response(404, "Pets not found.")
-class UserPets(Resource):
-    @token_required
-    @api.doc("get pets with specific owner")
-    @api.marshal_list_with(_pet, envelope="data")
-    def get(self, username):
-        pets = get_user_pets(username=username)
-
-        return pets
-
-@api.route("/specie/<specie_id>")
-@api.param("specie_id", "Pets with specific specie")
-@api.response(404, "Pets not found.")
-class SpeciePets(Resource):
-    @token_required
-    @api.doc("get pets with specific specie")
-    @api.marshal_list_with(_pet, envelope="data")
-    def get(self, specie_id):
-        pets = get_specie_pets(specie_id=specie_id)
-
-        return pets
-
-@api.route("/breed/<breed_id>")
-@api.param("breed_id", "Pets with specific breed")
-@api.response(404, "Pets not found.")
-class SpeciePets(Resource):
-    @token_required
-    @api.doc("get pets with specific breed")
-    @api.marshal_list_with(_pet, envelope="data")
-    def get(self, breed_id):
-        pets = get_breed_pets(breed_id=breed_id)
-
-        return pets
-
 @api.route("/<public_id>")
 @api.param("public_id", "The Pet identifier")
 @api.response(404, "Pet not found.")
-class Pet(Resource):
+class PetOperations(Resource):
     @token_required
     @api.doc("get a pet")
     @api.marshal_with(_pet)
@@ -117,3 +63,39 @@ class Pet(Resource):
 
         else:
             return pet
+
+@api.route("/user/<username>")
+@api.param("username", "Pets of a specific owner")
+@api.response(404, "Pets not found.")
+class GetUserPetList(Resource):
+    @token_required
+    @api.doc("get pets with specific owner")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, username):
+        pets = get_user_pets(username=username)
+
+        return pets
+
+@api.route("/specie/<specie_id>")
+@api.param("specie_id", "Pets with specific specie")
+@api.response(404, "Pets not found.")
+class GetSpeciePetList(Resource):
+    @token_required
+    @api.doc("get pets with specific specie")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, specie_id):
+        pets = get_specie_pets(specie_id=specie_id)
+
+        return pets
+
+@api.route("/breed/<breed_id>")
+@api.param("breed_id", "Pets with specific breed")
+@api.response(404, "Pets not found.")
+class GetBreedPetList(Resource):
+    @token_required
+    @api.doc("get pets with specific breed")
+    @api.marshal_list_with(_pet, envelope="data")
+    def get(self, breed_id):
+        pets = get_breed_pets(breed_id=breed_id)
+
+        return pets

@@ -2,14 +2,14 @@ from flask import request
 from flask_restplus import Resource
 from ..util.dto import UserDto
 from ..util.decorator import token_required
-from ..services.user_service import save_new_user, get_all_users, get_a_user, delete_user, update_user, get_logged_in_user
+from ..services.user_service import *
 
 api = UserDto.api
 _user = UserDto.user
 parser = UserDto.parser
 
 @api.route("/")
-class UserList(Resource):
+class UserAuth(Resource):
     @api.doc("show current user")
     def get(self):
         data, status = get_logged_in_user(request)
@@ -31,7 +31,7 @@ class UserList(Resource):
 @api.route("/<username>")
 @api.param("username", "The User identifier")
 @api.response(404, "User not found.")
-class User(Resource):
+class UserOperations(Resource):
     @token_required
     @api.doc("get a user")
     @api.marshal_with(_user)
@@ -66,3 +66,15 @@ class User(Resource):
 
         else:
             return user
+
+@api.route("/pet/<public_id>")
+@api.param("public", "Owners of a specific pet")
+@api.response(404, "Users not found.")
+class GetPetOwnerList(Resource):
+    @token_required
+    @api.doc("get owners with specific pet")
+    @api.marshal_list_with(_user, envelope="data")
+    def get(self, public_id):
+        owners = get_pet_owners(public_id=public_id)
+        print(owners)
+        return owners
