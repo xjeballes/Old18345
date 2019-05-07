@@ -37,7 +37,7 @@ class Helper:
 
         except Exception as e:
             return Helper.return_resp_obj("fail", "Some error occured.", None, 401)
-
+    
     @staticmethod
     def encode_auth_token(public_id):
         try:
