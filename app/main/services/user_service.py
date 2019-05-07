@@ -6,13 +6,6 @@ from app.main.services.help import Helper
 def save_new_user(data):
     user = User.query.filter_by(email=data["email"]).first()
 
-    check_first_user = User.query.filter_by(id=1).first()
-    
-    if not check_first_user:
-        is_admin = True
-    else:
-        is_admin = False
-        
     if not user:
         new_user = User(
             public_id = str(uuid.uuid4()),
@@ -23,7 +16,7 @@ def save_new_user(data):
             password = data["password"],
             contact_no = data["contactNo"],
             registered_on = datetime.datetime.utcnow(),
-            admin = is_admin
+            admin = False
         )
 
         Helper.save_changes(new_user)

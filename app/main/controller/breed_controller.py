@@ -1,27 +1,11 @@
 from flask_restplus import Resource
 from ..util.dto import BreedDto
-from ..util.decorator import *
+from ..util.decorator import token_required
 from ..services.breed_service import *
 
 api = BreedDto.api
 _breed = BreedDto.breed
 parser = BreedDto.parser
-
-@api.route("/")
-class BreedList(Resource):
-    @admin_token_required
-    @api.doc("show list of all registered breeds")
-    @api.marshal_list_with(_breed, envelope="data")
-    def get(self):
-        return get_all_breeds()
-
-    @admin_token_required
-    @api.response(201, "Breed successfully created.")
-    @api.doc("register a breed", parser=parser)
-    def post(self):
-        post_data = request.json
-
-        return save_new_breed(data=post_data)
 
 @api.route("/<public_id>")
 @api.param("public_id", "The Breed identifier")
