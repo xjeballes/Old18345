@@ -1,6 +1,6 @@
 from flask_restplus import Resource
 from ..util.dto import SpecieDto
-from ..util.decorator import token_required
+from ..util.decorator import *
 from ..services.specie_service import *
 
 api = SpecieDto.api
@@ -14,6 +14,14 @@ class SpecieList(Resource):
     @api.marshal_list_with(_specie, envelope="data")
     def get(self):
         return get_all_species()
+
+    @admin_token_required
+    @api.response(201, "Specie successfully created.")
+    @api.doc("register a specie", parser=parser)
+    def post(self):
+        post_data = request.json
+
+        return save_new_specie(data=post_data)
 
 @api.route("/<public_id>")
 @api.param("public_id", "The Specie identifier")
