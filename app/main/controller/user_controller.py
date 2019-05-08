@@ -76,5 +76,5 @@ class GetPetOwnerList(Resource):
     @api.marshal_list_with(_user, envelope="data")
     def get(self, public_id):
         owners = get_pet_owners(public_id=public_id)
-        print(owners)
+        
         return owners

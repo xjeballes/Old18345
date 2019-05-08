@@ -37,7 +37,6 @@ class PetDto:
         "birthday" : fields.DateTime(dt_format="rfc822", required=False, description="pet birthday"),
         "sex" : fields.String(required=True, description="pet sex"),
         "profPic_filename" : fields.String(required=True, description="pet large profile picture"),
-        "profPic_sm_filename" : fields.String(required=True, description="pet small profile picture"),
         "specie_name" : fields.String(required=True, description="pet specie"),
         "breed_name" : fields.String(required=True, description="pet breed"),
     })

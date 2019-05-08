@@ -17,7 +17,6 @@ class Pet(db.Model):
     birthday = db.Column(db.DateTime, nullable=True)
     sex = db.Column(db.String(100), nullable=False)
     profPic_filename = db.Column(db.String(50), nullable=False, default="pet-default-profPic.jpg")
-    profPic_sm_filename = db.Column(db.String(50), nullable=False, default="pet-default-profPic-sm.jpg")
     registered_on = db.Column(db.DateTime, nullable=False)
 
     specie_rel = db.relationship("Specie", secondary=pet_kind_rel, backref=db.backref("pet", lazy=True))
