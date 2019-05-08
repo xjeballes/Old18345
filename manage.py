@@ -15,7 +15,7 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 manager.add_command("db", MigrateCommand)
 
-@manage.command
+@manager.command
 def populate_db():
     try:
         x = db.session.query(func.count(Specie.id)).scalar()
