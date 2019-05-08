@@ -12,7 +12,7 @@ def setup_petKindList():
     specie_list = []
     breed_list = []
 
-    print("Good day, administrator! Since your database is new, we must first insert data in the specie and breed tables for the dependent servers to be ready of usage.")
+    print("Since your database is new, we must first insert data in the specie and breed tables for the dependent servers to be ready of usage.")
 
     specieList_len = int(input("Please input desired length of specie list: "))
 
@@ -69,4 +69,4 @@ def setup_petKindList():
 
     username = getpass.getuser()
 
-    print("Populated the databases successfully. Thank you, {}. You may now run this API.".format(username))
+    print("Populated the databases successfully. Thank you, {}.".format(username))

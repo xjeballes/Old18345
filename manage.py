@@ -15,6 +15,28 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 manager.add_command("db", MigrateCommand)
 
+@manage.command
+def populate_db():
+    try:
+        x = db.session.query(func.count(Specie.id)).scalar()
+        y = db.session.query(func.count(Breed.id)).scalar()
+
+        if x and y != 0:
+            print("Database is already populated with the necessary assets.")
+
+        else:
+            try:
+                setup_petKindList()
+                
+            except ValueError:
+                print("Read carefully and input what is required. Try again.")
+
+    except exc.OperationalError:
+        print("Create the databases first.")
+
+    except exc.ProgrammingError:
+        print("Please migrate your models to the databases.")
+
 @manager.command
 def run():
     try:
@@ -31,7 +53,6 @@ def run():
                 
             except ValueError:
                 print("Read carefully and input what is required. Try again.")
-
 
     except exc.OperationalError:
         print("Create the databases first.")
