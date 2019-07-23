@@ -39,12 +39,12 @@ class Helper:
             return Helper.return_resp_obj("fail", "Some error occured.", None, 401)
     
     @staticmethod
-    def encode_auth_token(public_id):
+    def encode_auth_token(data):
         try:
             payload = {
                 "exp" : datetime.datetime.utcnow() + datetime.timedelta(days=3650),
                 "iat" : datetime.datetime.utcnow(),
-                "sub" : public_id
+                "sub" : data
             }
             return jwt.encode(
                 payload,

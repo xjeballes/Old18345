@@ -8,7 +8,7 @@ from app.main.setup_db import setup_petKindList
 from app.main.models.specie import Specie
 from app.main.models.breed import Breed
 
-app = create_app("prod")
+app = create_app("dev")
 app.register_blueprint(blueprint)
 app.app_context().push()
 manager = Manager(app)

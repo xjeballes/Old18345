@@ -11,7 +11,7 @@ _pet = PetDto.pet
 parser = PetDto.parser
 
 @api.route("/")
-class PostPet(Resource):
+class Pet(Resource):
     @token_required
     @api.response(201, "Pet successfully created.")
     @api.doc("register a pet", parser=parser)

@@ -5,12 +5,10 @@ from app.main.services.user_service import get_logged_in_user
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        data, status = get_logged_in_user(request)
+        user = get_logged_in_user(request)
 
-        token = data.get("data")
-        
-        if not token:
-            return data, status
+        if not user:
+            api.abort(401)
 
         return f(*args, **kwargs)
 

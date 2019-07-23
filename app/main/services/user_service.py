@@ -26,6 +26,24 @@ def save_new_user(data):
     else:
         return Helper.return_resp_obj("fail", "User already exists. Please log in instead.", None, 409)
 
+def user_by_email_existence_check(data):
+    user = User.query.filter_by(email=data.get("email")).first()
+
+    if user:
+        return Helper.return_resp_obj("fail", "This e-mail has already been taken.", None, 409)
+
+    else:
+        return Helper.return_resp_obj("success", None, None, 200)
+
+def user_by_username_existence_check(data):
+    user = User.query.filter_by(username=data.get("username")).first()
+
+    if user:
+        return Helper.return_resp_obj("fail", "This username has already been taken.", None, 409)   
+
+    else:
+        return Helper.return_resp_obj("success", None, None, 200)
+
 def get_all_users():
     return User.query.all()
 
@@ -69,41 +87,9 @@ def get_logged_in_user(new_request):
     auth_token = new_request.headers.get("authorization")
 
     if auth_token:
-        public_id_resp = Helper.decode_auth_token(auth_token)
-        
-        user = User.query.filter_by(public_id=public_id_resp).first()
+        public_id = Helper.decode_auth_token(auth_token)
 
-        if user:
-            response_object = {
-                "status" : "success",
-                "data" : {
-                    "firstName" : user.first_name,
-                    "lastName" : user.last_name,
-                    "email" : user.email,
-                    "username" : user.username,
-                    "contactNo" : user.contact_no,
-                    "admin" : user.admin,
-                    "registeredOn" : str(user.registered_on)
-                }
-            }
-
-            return response_object, 200
-
-        else:
-            response_object = {
-                "status" : "fail",
-                "message": "Provide a valid authorized token."
-            }
-
-            return response_object, 401
-
-    else:
-        response_object = {
-            "status": "fail",
-            "message": "Provide a valid authorized token."
-        }
-
-        return response_object, 401
+        return User.query.filter_by(public_id=public_id).first()
 
 def get_pet_owners(public_id):
     users = db.session.query(User.first_name, User.last_name, User.bio, User.email, User.username, User.contact_no).filter(user_pet_rel.c.user_id==User.public_id).filter(user_pet_rel.c.pet_id==public_id).all()

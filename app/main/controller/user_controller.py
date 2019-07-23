@@ -9,24 +9,41 @@ _user = UserDto.user
 parser = UserDto.parser
 
 @api.route("/")
-class UserAuth(Resource):
+class User(Resource):
     @api.doc("show current user")
+    @api.doc("get current user")
+    @api.marshal_with(_user)
     def get(self):
-        data, status = get_logged_in_user(request)
+        user = get_logged_in_user(request)
 
-        payload = data.get("data")
-        
-        if not payload:
-            return data, status
+        if not user:
+            api.abort(404)
 
-        return payload
+        else:
+            return user
 
     @api.response(201, "User successfully created.")
     @api.doc("register a user", parser=parser)
     def post(self):
-        post_data = request.json
+        data = request.json
 
-        return save_new_user(data=post_data)
+        return save_new_user(data)
+
+@api.route("/verify/email")
+class UserByEmailExistenceCheck(Resource):
+    @api.doc("check user existence by email")
+    def get(self):
+        data = request.json
+
+        return user_by_email_existence_check(data)
+
+@api.route("/verify/username")
+class UserByUsernameExistenceCheck(Resource):
+    @api.doc("check user existence by username")
+    def get(self):
+        data = request.json
+
+        return user_by_username_existence_check(data)       
 
 @api.route("/<username>")
 @api.param("username", "The User identifier")
